@@ -1,3 +1,6 @@
+10-07-2025
+in the CSV file i calculated a normalized score for how "bad" each establisment is, from 0.00 to 1.00
+
 09-22-2025
 used branca library for gui improvments and legend
 
