@@ -1,47 +1,54 @@
 import folium
-#from bs4 import BeautifulSoup
-import csv
-#f = open("C:\Users\hunted\Desktop\code\mapper\Health Inspection Search - Search Results.htm")
 import branca
-# addresses = []
-# with open(r"export.csv", newline="", encoding="utf-8") as f:
-#     reader = csv.DictReader(f)
-#     for row in reader:
-#         full_address = f"{row['ADDRESS']}, {row['CITY']}, {row['STATE']} {row['ZIP']}"
-#         addresses.append(full_address)
-#     print(addresses)
+import csv
+import sys
 
-# importing geopy library and Nominatim class
-from geopy.geocoders import Nominatim
-import time
+INPUT_CSV_FILE = "portland_restaurants.csv"
+OUTPUT_MAP_FILE = "portland_map.html"
+PORTLAND_COORDINATES = [43.6615, -70.2553]
 
-m = folium.Map(location=[45.0, -69.0], zoom_start=7)  # Maine center
-loc = Nominatim(user_agent="Geopy Library")
-# legend
-colormap = branca.colormap.linear.YlOrRd_09.scale(0, 8500)
-colormap = colormap.to_step(index=[0, 10, 3000, 5000, 8500])
-colormap.caption = "restaurant calculated score"
+#  center on Portland
+m = folium.Map(location=PORTLAND_COORDINATES, zoom_start=13)
+
+
+colormap = branca.colormap.linear.YlOrRd_09.scale(0, 100)
+colormap = colormap.to_step(n=6)
+colormap.caption = "Restaurant Health Score (Lower is Better)"
 colormap.add_to(m)
-# print(len(addresses))
-# for address in addresses:
-#     try:
-#         getLoc = loc.geocode(address)
-#         if getLoc:
-#             folium.Marker([getLoc.latitude, getLoc.longitude], popup=address).add_to(m)
-#         else:
-#             pass
-#         time.sleep(1)
-#         print("marked")
-#     except (GeocoderTimedOut, GeocoderUnavailable) as e:
-#         print("error")
-#         time.sleep(2)
-#         continue
-# print(getLoc.address)
 
-# # printing latitude and longitude
-# print("Latitude = ", getLoc.latitude, "\n")
-# print("Longitude = ", getLoc.longitude)
-# m = folium.Map(location=[45.0, -69.0], zoom_start=7)  # Maine center
-# folium.Marker([44.5, -68.2], popup="restarant").add_to(m)
-# folium.Marker([44.51, -68.21], popup="restarant").add_to(m)
-m.save("map.html")
+
+try:
+    with open(INPUT_CSV_FILE, newline="", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            try:
+                lat = float(row['latitude'])
+                lon = float(row['longitude'])
+                name = row['ESTABLISHMENT_NAME']
+                score = int(row['CALCULATED'])
+                address = row['ADDRESS']
+
+                popup_text = f"<b>{name}</b><br>Score: {score}<br>{address}"
+
+                folium.CircleMarker(
+                    location=[lat, lon],
+                    radius=5,
+                    popup=popup_text,
+                    color=colormap(score),
+                    fill=True,
+                    fill_color=colormap(score)
+                ).add_to(m)
+
+            except (ValueError, KeyError):
+                #
+                continue
+
+except FileNotFoundError:
+    print(f"Error: Could not find the file '{INPUT_CSV_FILE}'.")
+    print("Please run the first script to create it.")
+    sys.exit()
+
+
+m.save(OUTPUT_MAP_FILE)
+
+print(f"Map has been created")
