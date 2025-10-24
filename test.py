@@ -11,8 +11,8 @@ PORTLAND_COORDINATES = [43.6615, -70.2553]
 m = folium.Map(location=PORTLAND_COORDINATES, zoom_start=13)
 
 
-colormap = branca.colormap.linear.YlOrRd_09.scale(0, 100)
-colormap = colormap.to_step(n=6)
+colormap = branca.colormap.LinearColormap(colors=['#00ff00', '#ff0000'])
+#colormap = colormap.to_step(n=6)
 colormap.caption = "Restaurant Health Score (Lower is Better)"
 colormap.add_to(m)
 
@@ -25,7 +25,7 @@ try:
                 lat = float(row['latitude'])
                 lon = float(row['longitude'])
                 name = row['ESTABLISHMENT_NAME']
-                score = int(row['CALCULATED'])
+                score = float(row['CALCULATED'])
                 address = row['ADDRESS']
 
                 popup_text = f"<b>{name}</b><br>Score: {score}<br>{address}"
