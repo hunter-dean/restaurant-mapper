@@ -38,26 +38,26 @@ def geocode_address(address):
         return None, None
 
 input_filename = "export.csv"
-output_filename = "portland_restaurants.csv"
+output_filename = "restaurants.csv"
 
-total_portland_restaurants = 0
+total_restaurants = 0
 try:
     with open(input_filename, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             if row["CITY"].strip().lower() == "portland":
-                total_portland_restaurants += 1
+                total_restaurants += 1
 except FileNotFoundError:
     print(f"Error: The file '{input_filename}' was not found.")
     sys.exit()
 
-if total_portland_restaurants == 0:
-    print("No restaurants found in Portland in the input file.")
+if total_restaurants == 0:
+    print("No restaurants found in the input file.")
     sys.exit()
 
-print(f"Found {total_portland_restaurants} total restaurants in Portland. Geocoding...")
+print(f"Found {total_restaurants} total restaurants. Geocoding...")
 
-portland_restaurants = []
+restaurants = []
 processed_count = 0
 
 with open(input_filename, newline="", encoding="utf-8") as csvfile:
@@ -65,8 +65,8 @@ with open(input_filename, newline="", encoding="utf-8") as csvfile:
     for row in reader:
         if row["CITY"].strip().lower() == "portland":
             processed_count += 1
-            percentage = (processed_count / total_portland_restaurants) * 100
-            print(f"Progress: {processed_count}/{total_portland_restaurants} ({percentage:.2f}%)", end='\r')
+            percentage = (processed_count / total_restaurants) * 100
+            print(f"Progress: {processed_count}/{total_restaurants} ({percentage:.2f}%)", end='\r')
 
             r = Restaurant(
                 est_id=row["EST ID #"], establishment_name=row["ESTABLISHMENT_NAME"],
@@ -84,8 +84,8 @@ with open(input_filename, newline="", encoding="utf-8") as csvfile:
             if lat and lon:
                 r.latitude = lat
                 r.longitude = lon
-                portland_restaurants.append(r)
-                if len(portland_restaurants) >= 100:
+                restaurants.append(r)
+                if len(restaurants) >= 4510:
                     break
 
 print("\n")
@@ -100,7 +100,7 @@ output_headers = [
 with open(output_filename, "w", newline="", encoding="utf-8") as outfile:
     writer = csv.DictWriter(outfile, fieldnames=output_headers, extrasaction='ignore')
     writer.writeheader()
-    for r in portland_restaurants:
+    for r in restaurants:
         restaurant_data = {
             "EST ID #": r.est_id, "ESTABLISHMENT_NAME": r.establishment_name,
             "C_OUT": r.c_out, "NC_OUT": r.nc_out, "INSP_DATE": r.insp_date,
@@ -113,5 +113,5 @@ with open(output_filename, "w", newline="", encoding="utf-8") as outfile:
         }
         writer.writerow(restaurant_data)
 
-print(f"Finished. Geocoded {len(portland_restaurants)} restaurants.")
+print(f"Finished. Geocoded {len(restaurants)} restaurants.")
 print(f"Data has been written to {output_filename}")
