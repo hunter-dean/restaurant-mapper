@@ -1,3 +1,6 @@
+11-14-2025 & previous week
+added basic HTML popup to each marker, geocoded for whole state. Experiencing strange bug where a large portion of restaurants are not geocoded/displayed on the map. Current plan is to fix this issue in the coming week.
+
 10-07-2025
 in the CSV file i calculated a normalized score for how "bad" each establisment is, from 0.00 to 1.00
 
