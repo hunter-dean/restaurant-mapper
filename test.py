@@ -3,15 +3,15 @@ import branca
 import csv
 import sys
 
-INPUT_CSV_FILE = "portland_restaurants.csv"
-OUTPUT_MAP_FILE = "portland_map.html"
+INPUT_CSV_FILE = "restaurants.csv"
+OUTPUT_MAP_FILE = "map.html"
 PORTLAND_COORDINATES = [43.6615, -70.2553]
 
 #  center on Portland
 m = folium.Map(location=PORTLAND_COORDINATES, zoom_start=13)
 
 
-colormap = branca.colormap.LinearColormap(colors=['#00ff00', '#ff0000'])
+colormap = branca.colormap.LinearColormap(colors=['#00ff00', '#ff0000'], index=[0.0, 0.5])
 #colormap = colormap.to_step(n=6)
 colormap.caption = "Restaurant Health Score (Lower is Better)"
 colormap.add_to(m)
@@ -27,12 +27,19 @@ try:
                 name = row['ESTABLISHMENT_NAME']
                 score = float(row['CALCULATED'])
                 address = row['ADDRESS']
-
-                popup_text = f"<b>{name}</b><br>Score: {score}<br>{address}"
+                critical = int(row['C_OUT'])
+                noncritical = int(row['NC_OUT'])
+                if row['FAILED'] == 'Yes':
+                    failed = True
+                elif row['FAILED'] == 'No':
+                    failed = False
+                else:
+                    failed = "error?"
+                popup_text = f"<h1>{name}</h1><br>{address}<br>Critical Violations: {critical}<br>Non-Critical Violations: {noncritical} <br> calculated score: {score}<br><h2>Failed?: {failed}</h2>"
 
                 folium.CircleMarker(
                     location=[lat, lon],
-                    radius=5,
+                    radius=6,
                     popup=popup_text,
                     color=colormap(score),
                     fill=True,
