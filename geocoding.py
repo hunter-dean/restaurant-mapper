@@ -45,7 +45,7 @@ try:
     with open(input_filename, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row["CITY"].strip().lower() == "portland":
+            #if row["CITY"].strip().lower() == "portland":
                 total_restaurants += 1
 except FileNotFoundError:
     print(f"Error: The file '{input_filename}' was not found.")
@@ -63,7 +63,7 @@ processed_count = 0
 with open(input_filename, newline="", encoding="utf-8") as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        if row["CITY"].strip().lower() == "portland":
+        #if row["CITY"].strip().lower() == "portland":
             processed_count += 1
             percentage = (processed_count / total_restaurants) * 100
             print(f"Progress: {processed_count}/{total_restaurants} ({percentage:.2f}%)", end='\r')
