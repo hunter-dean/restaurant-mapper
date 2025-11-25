@@ -85,8 +85,6 @@ with open(input_filename, newline="", encoding="utf-8") as csvfile:
                 r.latitude = lat
                 r.longitude = lon
                 restaurants.append(r)
-                if len(restaurants) >= 4510:
-                    break
 
 print("\n")
 
