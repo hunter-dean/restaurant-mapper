@@ -1,3 +1,6 @@
+12-04-2025
+added skull and crossbones icon to failed restaurants using fontawesome library
+
 11-14-2025 & previous week
 added basic HTML popup to each marker, geocoded for whole state using nonatim. Experiencing strange bug where a large portion of restaurants are not geocoded/displayed on the map. Current plan is to fix this issue in the coming week.
 
