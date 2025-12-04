@@ -11,7 +11,7 @@ PORTLAND_COORDINATES = [43.6615, -70.2553]
 m = folium.Map(location=PORTLAND_COORDINATES, zoom_start=13)
 
 
-colormap = branca.colormap.LinearColormap(colors=['#00ff00', '#ff0000'], index=[0.0, 0.5])
+colormap = branca.colormap.LinearColormap(colors=['#00ff00', '#ff0000'], index=[0.0, 0.3])
 #colormap = colormap.to_step(n=6)
 colormap.caption = "Restaurant Health Score (Lower is Better)"
 colormap.add_to(m)
@@ -37,7 +37,20 @@ try:
                     failed = "error?"
                 popup_text = f"<h1>{name}</h1><br>{address}<br>Critical Violations: {critical}<br>Non-Critical Violations: {noncritical} <br> calculated score: {score}<br><h2>Failed?: {failed}</h2>"
 
-                folium.CircleMarker(
+                #adding skelebones
+                if failed == True:
+                    folium.Marker(
+                        location=[lat, lon],
+                        popup=popup_text,
+                        icon=folium.Icon(
+                            color='black',           
+                            icon_color='white',     
+                            icon='skull-crossbones', 
+                            prefix='fa'              
+                        )
+                    ).add_to(m)
+                else:   
+                    folium.CircleMarker(
                     location=[lat, lon],
                     radius=6,
                     popup=popup_text,
