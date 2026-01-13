@@ -1,3 +1,6 @@
+01-13-2026
+All the essentials are here. Basic graph implimented, geocoder bug fixed, html works with the map. only thing left is to find time for the geocoder to run. ✅✅✅✅
+
 12-04-2025
 added skull and crossbones icon to failed restaurants using fontawesome library
 
@@ -22,9 +25,10 @@ pin on map for every restaurant location (< 1  week) ✅
 create pop up window for each location on map (< 1 week) ✅
 assign a value to each restaurant based on # of critical and non-critical violations ( 1 week ) ✅
 convert said value to a color, perfect being #00FF00, and worst being #FF0000 (< 1 week) ✅
-fix issue where restaurants are not being mapped (1 week)
-create history of restaurant inspections based on id # in CSV (1 week)
-add a graph of restaurant score over time and add said graph to HTML popup (1-2 weeks)
+fix issue where restaurants are not being mapped (1 week) ✅
+create history of restaurant inspections based on id # in CSV (1 week) ✅
+add a graph of restaurant score over time and add said graph to HTML popup (1-2 weeks) ✅
+
 
 ======if extra time=========
 add other establisments from OG CSV other than restaurants (1-2 weeks)
