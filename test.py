@@ -31,12 +31,20 @@ try:
                 noncritical = int(row['NC_OUT'])
                 history = row.get('HISTORY_LOG', 'No history')
 
+                # Moved this block UP so 'failed' is defined before use
+                if row['FAILED'] == 'Yes':
+                    failed = True
+                elif row['FAILED'] == 'No':
+                    failed = False
+                else:
+                    failed = "error?"
+
                 # fun graph logic
                 history_steps = history.split(' | ')
                 graph_html = "<div style='width:200px; border-top:1px solid #ccc; margin-top:10px; padding-top:10px;'><b>History:</b><br>"
+                
                 for step in history_steps:
                     if "Score:" in step:
-                        #gets score from sting
                         try:
                             h_score = float(step.split("Score:")[1].split(",")[0])
                             bar_width = min(int(h_score * 300), 100)
@@ -44,19 +52,20 @@ try:
                             graph_html += f"<div style='background:{colormap(h_score)}; width:{bar_width}%; height:5px; margin-bottom:5px;'></div>"
                         except:
                             continue
-                        graph_html += "</div>"
+                
+                # goes OUTSIDE the for loop
+                graph_html += "</div>" 
+                
+                # add popyp
+                popup_text = f"""
+                <h1>{name}</h1><br>{address}<br>
+                Critical Violations: {critical}<br>
+                Non-Critical Violations: {noncritical}<br>
+                calculated score: {score}<br>
+                <h2>Failed?: {failed}</h2>
+                {graph_html}
+                """
                 #end graph logic
-
-
-
-
-                if row['FAILED'] == 'Yes':
-                    failed = True
-                elif row['FAILED'] == 'No':
-                    failed = False
-                else:
-                    failed = "error?"
-                popup_text = f"<h1>{name}</h1><br>{address}<br>Critical Violations: {critical}<br>Non-Critical Violations: {noncritical} <br> calculated score: {score}<br><h2>Failed?: {failed}</h2>"
 
                 #adding skelebones
                 if failed == True:
