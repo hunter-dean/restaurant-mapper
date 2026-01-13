@@ -77,7 +77,8 @@ with open(input_filename, newline="", encoding="utf-8") as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         #if row["CITY"].strip().lower() == "portland":
-        
+            if processed_count > 1000:                                     # <-------- DELETE THIS!!!!!!!!!!!!!!!
+                break                                                      # <-------- DELETE THIS!!!!!!!!!!!!!!!
             processed_count += 1
             percentage = (processed_count / total_rows) * 100
             print(f"Progress: {processed_count}/{total_rows} ({percentage:.2f}%)", end='\r')
